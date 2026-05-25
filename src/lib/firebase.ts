@@ -5,7 +5,31 @@ import { getStorage } from 'firebase/storage';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app, (firebaseConfig as any).firestoreDatabaseId);
+export const MAIN_FIRESTORE_DB_ID = (firebaseConfig as any).firestoreDatabaseId ?? 'default';
+const urlParams = typeof window !== 'undefined'
+  ? new URLSearchParams(window.location.search)
+  : new URLSearchParams();
+const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+const isSuperAdminRoute = currentPath.startsWith('/superadmin');
+const overrideDbFromUrl = urlParams.get('db');
+const overrideDbFromSession = typeof window !== 'undefined' ? sessionStorage.getItem('db_override') : null;
+
+if (!isSuperAdminRoute && overrideDbFromUrl) {
+  sessionStorage.setItem('db_override', overrideDbFromUrl);
+} else if (!isSuperAdminRoute && !overrideDbFromUrl && typeof window !== 'undefined' && currentPath === '/') {
+  sessionStorage.removeItem('db_override');
+}
+
+export const FIRESTORE_DB_ID = !isSuperAdminRoute && overrideDbFromUrl
+  ? overrideDbFromUrl
+  : !isSuperAdminRoute && overrideDbFromSession
+  ? overrideDbFromSession
+  : MAIN_FIRESTORE_DB_ID;
+
+export const db = getFirestore(app, FIRESTORE_DB_ID);
+export const mainDb = FIRESTORE_DB_ID === MAIN_FIRESTORE_DB_ID
+  ? db
+  : getFirestore(app, MAIN_FIRESTORE_DB_ID);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
@@ -14,12 +38,13 @@ async function testConnection() {
     await getDocFromServer(doc(db, 'test', 'connection'));
     console.log("Firestore connection successful");
   } catch (error) {
-    if(error instanceof Error && error.message.includes('the client is offline')) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
       console.error("Please check your Firebase configuration.");
     }
     console.error("Firestore connectivity check error:", error);
   }
 }
+
 testConnection();
 
 export const OperationType = {

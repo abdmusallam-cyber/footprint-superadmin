@@ -79,6 +79,12 @@ export function isSuperAdminAuthenticated(): boolean {
   return true;
 }
 
+export function ensureSuperAdminSession(): void {
+  if (!isSuperAdminAuthenticated()) {
+    throw new Error('Super admin session غير صالحة أو انتهت. يرجى تسجيل الدخول مرة أخرى.');
+  }
+}
+
 /** Log out Super Admin — also clears Firebase anonymous session */
 export async function superAdminLogout(): Promise<void> {
   sessionStorage.removeItem(SESSION_KEY);

@@ -7,18 +7,21 @@
 import type { Tenant } from '../types';
 import firebaseConfig from '../../firebase-applet-config.json';
 import { collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
-import { db } from './firebase';
+import { superAdminDb } from './superAdminFirebase';
+import { ensureSuperAdminSession } from './superAdminAuth';
 
 const CURRENT_APP_DB_ID = (firebaseConfig as any).firestoreDatabaseId ?? 'default';
 
 export async function getAllTenants(): Promise<Tenant[]> {
-  const q = query(collection(db, 'tenants'), orderBy('createdAt', 'desc'));
+  ensureSuperAdminSession();
+  const q = query(collection(superAdminDb, 'tenants'), orderBy('createdAt', 'desc'));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Tenant));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Tenant));
 }
 
 export async function getTenantById(id: string): Promise<Tenant | null> {
-  const docRef = doc(db, 'tenants', id);
+  ensureSuperAdminSession();
+  const docRef = doc(superAdminDb, 'tenants', id);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     return { id: docSnap.id, ...docSnap.data() } as Tenant;
@@ -27,7 +30,8 @@ export async function getTenantById(id: string): Promise<Tenant | null> {
 }
 
 export async function createTenant(data: Omit<Tenant, 'id' | 'createdAt'>): Promise<Tenant> {
-  const docRef = await addDoc(collection(db, 'tenants'), {
+  ensureSuperAdminSession();
+  const docRef = await addDoc(collection(superAdminDb, 'tenants'), {
     ...data,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -36,7 +40,8 @@ export async function createTenant(data: Omit<Tenant, 'id' | 'createdAt'>): Prom
 }
 
 export async function updateTenant(id: string, data: Partial<Omit<Tenant, 'id' | 'createdAt'>>): Promise<Tenant | null> {
-  const docRef = doc(db, 'tenants', id);
+  ensureSuperAdminSession();
+  const docRef = doc(superAdminDb, 'tenants', id);
   await updateDoc(docRef, {
     ...data,
     updatedAt: new Date().toISOString(),
@@ -45,7 +50,8 @@ export async function updateTenant(id: string, data: Partial<Omit<Tenant, 'id' |
 }
 
 export async function deleteTenant(id: string): Promise<boolean> {
-  const docRef = doc(db, 'tenants', id);
+  ensureSuperAdminSession();
+  const docRef = doc(superAdminDb, 'tenants', id);
   await deleteDoc(docRef);
   return true;
 }

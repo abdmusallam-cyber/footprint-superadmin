@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Eye, EyeOff, Lock, User, AlertCircle, Zap } from 'lucide-react';
@@ -14,6 +14,12 @@ export default function SuperAdminLogin() {
   const [attempts, setAttempts] = useState(0);
   const navigate = useNavigate();
   const { checkAuth } = useSuperAdmin();
+
+  useEffect(() => {
+    if (checkAuth()) {
+      navigate('/superadmin', { replace: true });
+    }
+  }, [checkAuth, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

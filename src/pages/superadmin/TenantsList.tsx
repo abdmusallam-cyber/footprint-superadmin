@@ -159,8 +159,9 @@ export default function TenantsList() {
         {/* Table Header */}
         <div className="grid grid-cols-12 gap-4 px-6 py-3 text-xs font-bold uppercase tracking-widest"
           style={{ background: 'rgba(139,92,246,0.06)', color: '#6b6b9a', borderBottom: '1px solid rgba(139,92,246,0.1)' }}>
-          <div className="col-span-4">الشركة</div>
+          <div className="col-span-4 xl:col-span-3">الشركة</div>
           <div className="col-span-2 hidden lg:block">قاعدة البيانات</div>
+          <div className="col-span-1 hidden xl:block">المستودعات</div>
           <div className="col-span-2">الخطة</div>
           <div className="col-span-2">الحالة</div>
           <div className="col-span-1 hidden md:block">ينتهي</div>
@@ -205,7 +206,7 @@ export default function TenantsList() {
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                 >
                   {/* Company */}
-                  <div className="col-span-4 flex items-center gap-3 min-w-0">
+                  <div className="col-span-4 xl:col-span-3 flex items-center gap-3 min-w-0">
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                       style={{ background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.2)' }}>
                       <Building2 className="w-4 h-4" style={{ color: '#8b5cf6' }} />
@@ -226,6 +227,17 @@ export default function TenantsList() {
                       style={{ background: 'rgba(99,102,241,0.1)', color: '#a78bfa' }}>
                       {tenant.dbId}
                     </code>
+                  </div>
+
+                  {/* Warehouses */}
+                  <div className="col-span-1 hidden xl:block">
+                    <span className="text-xs font-medium px-3 py-1 rounded-full"
+                      style={{
+                        background: 'rgba(99,102,241,0.08)',
+                        color: '#a5b4fc'
+                      }}>
+                      {tenant.maxBranches ?? '—'}
+                    </span>
                   </div>
 
                   {/* Plan */}

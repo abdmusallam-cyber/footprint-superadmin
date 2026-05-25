@@ -85,6 +85,12 @@ export default function TenantDetails() {
     }
   };
 
+  const toggleActiveStatus = async () => {
+    if (!tenant) return;
+    const nextStatus: TenantStatus = tenant.status === 'active' ? 'suspended' : 'active';
+    await handleStatusChange(nextStatus);
+  };
+
   const handleDelete = async () => {
     if (!tenant) return;
     if (!confirm('هل أنت متأكد من حذف هذه النسخة نهائياً؟')) return;
@@ -200,7 +206,7 @@ export default function TenantDetails() {
             <DetailRow icon={Layers}   label="الخطة"           value={PLAN_LABELS[tenant.plan] || tenant.plan} />
             <DetailRow icon={Calendar} label="تاريخ الانتهاء"  value={format(parseISO(tenant.expiresAt), 'dd/MM/yyyy')} />
             <DetailRow icon={Users}    label="أقصى مستخدمين"   value={String(tenant.maxUsers || '—')} />
-            <DetailRow icon={Building2} label="أقصى فروع"      value={String(tenant.maxBranches || '—')} />
+            <DetailRow icon={Building2} label="أقصى مستودعات"   value={String(tenant.maxBranches || '—')} />
           </div>
         </div>
 
@@ -257,6 +263,24 @@ export default function TenantDetails() {
                 </button>
               );
             })}
+          </div>
+
+          <div className="p-5 rounded-2xl space-y-3"
+            style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(139,92,246,0.15)' }}>
+            <h3 className="font-black text-xs uppercase tracking-widest mb-3" style={{ color: '#8b5cf6' }}>
+              أوامر سريعة
+            </h3>
+            <button
+              onClick={toggleActiveStatus}
+              disabled={changingStatus}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
+              style={{
+                background: tenant.status === 'active' ? 'rgba(248,113,113,0.12)' : 'rgba(74,222,128,0.12)',
+                border: tenant.status === 'active' ? '1px solid rgba(248,113,113,0.2)' : '1px solid rgba(74,222,128,0.25)',
+                color: tenant.status === 'active' ? '#f87171' : '#4ade80'
+              }}>
+              {tenant.status === 'active' ? 'إيقاف النسخة الآن' : 'تشغيل النسخة'}
+            </button>
           </div>
 
           {/* Danger Zone */}

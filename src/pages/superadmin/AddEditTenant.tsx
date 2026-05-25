@@ -403,7 +403,7 @@ export default function AddEditTenant() {
               <FormField label="أقصى مستخدمين" icon={Users}>
                 <StyledInput type="number" min="1" value={form.maxUsers} onChange={set('maxUsers')} />
               </FormField>
-              <FormField label="أقصى فروع" icon={Building2}>
+              <FormField label="أقصى مستودعات" icon={Building2}>
                 <StyledInput type="number" min="1" value={form.maxBranches} onChange={set('maxBranches')} />
               </FormField>
             </div>
