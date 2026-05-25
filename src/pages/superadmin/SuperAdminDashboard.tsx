@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Building2, CheckCircle2, XCircle, Clock, AlertTriangle,
-  TrendingUp, Plus, ChevronLeft, Activity, Layers
+  Plus, ChevronLeft, Activity, Layers
 } from 'lucide-react';
 import { getAllTenants } from '../../lib/tenantStorage';
 import type { Tenant, TenantStatus } from '../../types';
-import { format, differenceInDays, parseISO } from 'date-fns';
-import { ar } from 'date-fns/locale';
+import { differenceInDays, parseISO } from 'date-fns';
 
 const STATUS_CONFIG: Record<TenantStatus, { label: string; color: string; bg: string; icon: React.ElementType }> = {
   active:    { label: 'نشطة',     color: '#4ade80', bg: 'rgba(74,222,128,0.1)',   icon: CheckCircle2 },

@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { SuperAdminProvider } from './context/SuperAdminContext';
 import SuperAdminLayout from './pages/superadmin/SuperAdminLayout';

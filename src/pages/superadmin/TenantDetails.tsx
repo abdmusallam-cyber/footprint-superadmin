@@ -53,7 +53,7 @@ function DetailRow({ icon: Icon, label, value, mono = false, copyable = false }:
 }
 
 export default function TenantDetails() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [loading, setLoading] = useState(true);
@@ -61,8 +61,9 @@ export default function TenantDetails() {
 
   useEffect(() => {
     if (!id) return;
+    const tenantId = id;
     async function fetchTenant() {
-      const data = await getTenantById(id);
+      const data = await getTenantById(tenantId);
       if (data) setTenant(data);
       setLoading(false);
     }

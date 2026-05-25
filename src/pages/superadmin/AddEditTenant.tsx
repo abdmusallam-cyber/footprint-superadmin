@@ -7,7 +7,7 @@ import {
   Zap, CheckCircle2
 } from 'lucide-react';
 import { createTenant, updateTenant, getTenantById } from '../../lib/tenantStorage';
-import type { Tenant, TenantStatus, TenantPlan } from '../../types';
+import type { TenantStatus, TenantPlan } from '../../types';
 import { format, addMonths, addYears } from 'date-fns';
 import firebaseConfig from '../../../firebase-applet-config.json';
 
@@ -123,9 +123,10 @@ export default function AddEditTenant() {
   const [presetApplied, setPresetApplied] = useState(false);
 
   useEffect(() => {
-    if (isEdit && id) {
+    if (typeof id === 'string' && id !== 'new') {
+      const tenantId = id;
       async function fetchTenant() {
-        const data = await getTenantById(id);
+        const data = await getTenantById(tenantId);
         if (data) {
           setForm({
             name: data.name,

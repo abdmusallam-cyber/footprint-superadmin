@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { getAllTenants, updateTenant, deleteTenant } from '../../lib/tenantStorage';
 import type { Tenant, TenantStatus, TenantPlan } from '../../types';
-import { format, differenceInDays, parseISO } from 'date-fns';
+import { differenceInDays, parseISO } from 'date-fns';
 
 const STATUS_CONFIG: Record<TenantStatus, { label: string; color: string; bg: string; icon: React.ElementType }> = {
   active:    { label: 'نشطة',    color: '#4ade80', bg: 'rgba(74,222,128,0.12)',  icon: CheckCircle2 },

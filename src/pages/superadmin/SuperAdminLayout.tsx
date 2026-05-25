@@ -1,8 +1,7 @@
-import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  LayoutDashboard, Building2, LogOut, ShieldCheck, Plus, Settings,
+  LayoutDashboard, Building2, LogOut, ShieldCheck, Plus,
   ChevronRight, Zap
 } from 'lucide-react';
 import { useSuperAdmin } from '../../context/SuperAdminContext';
